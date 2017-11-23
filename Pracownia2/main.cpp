@@ -9,7 +9,6 @@ pthread_mutex_t animalMutex, foodMutex;
 
 void *hunterJob(void *id) {
    for(int i = 0; i < 365; i++) {
-    std::cout << "hello\n";
     while(pthread_mutex_lock(&animalMutex)) {}
     int v1 = rand() % 6;
     int v2 = rand() % 6;
@@ -25,14 +24,13 @@ void *hunterJob(void *id) {
       pthread_mutex_unlock(&foodMutex);
       pthread_exit(NULL);
     }
-    usleep(100);
+    usleep(10000);
    }
    return 0;
 }
   
 void *cookJob(void *id) {
    for(int i = 0; i < 365; i++) {
-    std::cout << i << "\n";
     while(pthread_mutex_lock(&animalMutex)) {}
     if(Animals > 0) {
       Animals--;
@@ -52,7 +50,7 @@ void *cookJob(void *id) {
       pthread_mutex_unlock(&foodMutex);
       pthread_exit(NULL);
     }
-    usleep(100);
+    usleep(10000);
   }
   return 0;
 }
@@ -70,7 +68,6 @@ int main (int argc, char *argv[]) {
   pthread_t cooksThreads[startCooks];
 
   int rc;
-  void *status;
    
   for(long i = 0; i < startHunters; i++) {
     rc = pthread_create(&huntersThreads[i], NULL, hunterJob, NULL);
@@ -84,22 +81,6 @@ int main (int argc, char *argv[]) {
     rc = pthread_create(&cooksThreads[i], NULL, cookJob, NULL);
     if (rc) {
       std::cout << "Error:unable to create thread," << rc << '\n';
-      exit(-1);
-    }
-  }
-
-  for(long i = 0; i < startHunters; i++) {
-    rc = pthread_join(huntersThreads[i], &status);
-    if (rc) {
-      std::cout << "Error:unable to join," << rc << '\n';
-      exit(-1);
-    }
-  }
-
-  for(long i = 0; i < startCooks; i++) {
-    rc = pthread_join(cooksThreads[i], &status);
-    if (rc) {
-      std::cout << "Error:unable to join," << rc << '\n';
       exit(-1);
     }
   }
