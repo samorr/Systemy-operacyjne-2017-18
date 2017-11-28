@@ -9,7 +9,7 @@ main.o : Makefile   main.cpp
 	$(CPP) -c $(Flags) main.cpp -o  main.o
 
 run : main
-	./main
+	./main 5 6 100 100
 
 clean : main
 		$(RM) main
