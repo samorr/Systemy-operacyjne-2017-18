@@ -1,0 +1,4 @@
+Projekt polega na zaimplementowaniu (przynajmniej) części biblioteki do obsługi wątków wraz z semaforami.
+Będzie to polegało na zaimplementowaniu wybranego podinterfejsu takiej biblioteki prawdopodobnie przy 
+użyciu innej - np. takiej, która ma już zaimplementowane niektóre elementy. Póki co planowana jest
+implementacja przez wykorzystanie "context switching".
