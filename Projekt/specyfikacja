@@ -1,4 +1,15 @@
-Projekt polega na zaimplementowaniu (przynajmniej) części biblioteki do obsługi wątków wraz z semaforami.
-Będzie to polegało na zaimplementowaniu wybranego podinterfejsu takiej biblioteki prawdopodobnie przy 
-użyciu innej - np. takiej, która ma już zaimplementowane niektóre elementy. Póki co planowana jest
-implementacja przez wykorzystanie "context switching".
+Projekt polega na zaimplementowaniu uproszczonej biblioteki do obsługi wątków wraz z semaforami.
+
+Programy, w których będzie mogła być użyta biblioteka, będą musiały mieć specjalna strukturę.
+Co odpowiedni kawałek kodu (co jedną instrukcję lub co kilka, gdy kilka instrukcji będzie miało 
+odpowiadać instrukcji atomowej), będzie wywoływana specjalna funkcja shedule, które będzie mogła
+przerwać aktualnie działający wątek i uruchomić inny. W ten sposób w jednowątkowym programie
+będziemy symulować wiele wątków.
+
+Biblioteka musi implementować takie funkcje jak thread_create, thread_join oraz thread_yield,
+które będa spełniały podobną specyfikację jak ich odpowiedniki w bibliotece pthreads, tyle tylko, 
+że będą działały na programach o specyfice podanej wyżej.
+
+Oprócz tego biblioteka ma implementować semafory wraz z operacjami wait i signal, które będą
+blokować (gdy dostępny lub dodawać do kolejki, gdy nie) i zwalniać dostęp do semafora odpowiednio.
+Semafory będą korzystać z kolejek procesów oczekujących na dopuszczenie.
