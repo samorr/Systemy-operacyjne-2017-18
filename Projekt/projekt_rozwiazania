@@ -1,0 +1,5 @@
+Wątki będą trzymane w globalnej kolejce (w podstawowej wersji FIFO, możliwe są  optymalizacje
+z wykorzystaniem innego rodzaju kolejki). Funkcja schedule będzie przełączać kolejne wątki.
+Przy takiej specyfikacji implementacja funkcji thread_create i thread_yield będzie po prostu
+tworzeniem nowego wątku w kolejce i operacją na kolejce odpowiednio. thread_join będzie
+wykorzystywać strukturę samego wątku.

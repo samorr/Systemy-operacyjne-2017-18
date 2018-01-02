@@ -2,7 +2,7 @@ Projekt polega na zaimplementowaniu uproszczonej biblioteki do obsługi wątków
 
 Programy, w których będzie mogła być użyta biblioteka, będą musiały mieć specjalna strukturę.
 Co odpowiedni kawałek kodu (co jedną instrukcję lub co kilka, gdy kilka instrukcji będzie miało 
-odpowiadać instrukcji atomowej), będzie wywoływana specjalna funkcja shedule, które będzie mogła
+odpowiadać instrukcji atomowej), będzie wywoływana specjalna funkcja schedule, które będzie mogła
 przerwać aktualnie działający wątek i uruchomić inny. W ten sposób w jednowątkowym programie
 będziemy symulować wiele wątków.
 
