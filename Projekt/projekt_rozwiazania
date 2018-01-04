@@ -3,3 +3,5 @@ z wykorzystaniem innego rodzaju kolejki). Funkcja schedule będzie przełączać
 Przy takiej specyfikacji implementacja funkcji thread_create i thread_yield będzie po prostu
 tworzeniem nowego wątku w kolejce i operacją na kolejce odpowiednio. thread_join będzie
 wykorzystywać strukturę samego wątku.
+
+Obsługa tworzenia i zmiany wykonywanego wątku będzie wykorzystywała bibliotekę ucontext.
