@@ -6,7 +6,7 @@
 
 typedef struct sthread {
 	ucontext_t *context;
-    sthread_t  *next;
+    struct sthread  *next;
 } sthread_t;
 
 struct sthreads_global_queue {
@@ -18,7 +18,7 @@ struct sthreads_global_queue {
 struct sthreads_global_queue *global_threads_queue;
 
 void init_threads(sthread_t *caller) {
-    global_threads_queue = (struct sthreads_global_queue*) malloc(sizeof(sthreads_global_queue));
+    global_threads_queue = (struct sthreads_global_queue*) malloc(sizeof(struct sthreads_global_queue));
     global_threads_queue->first = caller;
     global_threads_queue->last = caller;
 }
@@ -31,6 +31,10 @@ void schedule() {
     global_threads_queue->last->next = global_threads_queue->first;
     swapcontext(global_threads_queue->last->context, global_threads_queue->first->context);
 }
+
+void thread_create(sthread_t *thr, void (*func)(), void *arg);
+void thread_yield();
+void thread_join(sthread_t *thr);
 
 
 #endif /* __SIMPLE_THREADS_H */
