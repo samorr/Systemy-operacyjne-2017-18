@@ -1,6 +1,7 @@
 #output files
 main
-main.o
+*.o
+*.out
 
 #VS Code files
 .vscode
