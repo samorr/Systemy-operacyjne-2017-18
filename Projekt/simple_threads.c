@@ -41,11 +41,14 @@ void init_threads(sthread_t *caller) {
 }
 
 void thread_yield() {
-
+    // for now it is enough to just call schedule
+    schedule();
 }
+
 void thread_join(sthread_t *thr, void *retval) {
-
+    
 }
+
 void thread_exit() {
     // printf("exiting\n");
     sthread_t *thr = global_threads_queue->first;

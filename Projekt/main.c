@@ -6,7 +6,7 @@ sthread_t T1, T2, T3, Main;
 
 void fn1() {
     printf("this is from 1\n");
-    schedule();
+    thread_yield();
     printf("once again 1\n");
     thread_exit();
 }
