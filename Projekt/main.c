@@ -1,5 +1,4 @@
 #include<stdio.h>
-#include<stdlib.h>
 #include "simple_threads.h"
 
 sthread_t T1, T2, T3, Main;

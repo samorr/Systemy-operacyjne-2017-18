@@ -5,7 +5,7 @@
 void thread_create(sthread_t *thr, void (*func)(), void *arg) {
     // printf("creating\n");
     thr = (sthread_t *) malloc(sizeof(sthread_t));
-    thr->context = (ucontext_t*) malloc(sizeof(ucontext_t));
+    thr->context = (ucontext_t *) malloc(sizeof(ucontext_t));
     getcontext(thr->context);
     thr->context->uc_stack.ss_sp = malloc(MEM);
     thr->context->uc_stack.ss_size = MEM;
@@ -46,7 +46,7 @@ void thread_yield() {
 }
 
 void thread_join(sthread_t *thr, void *retval) {
-    
+
 }
 
 void thread_exit() {

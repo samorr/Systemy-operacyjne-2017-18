@@ -1,4 +1,4 @@
-Flags = -Wall -Werror
+Flags = -Wall -Werror -g
 C = gcc
 
 
