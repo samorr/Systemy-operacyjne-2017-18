@@ -7,16 +7,19 @@ void fn1() {
     printf("this is from 1\n");
     thread_yield();
     printf("once again 1\n");
-    thread_exit();
+    thread_exit(0);
 }
 void fn2() {
     printf("this is from 2\n");
-    thread_exit();
+    void *from3;
+    thread_join(&T3, &from3);
+    printf("value from 3 %ld\n", (long) from3);
+    thread_exit(0);
 }
 
 void fn3() {
     printf("this is from 3\n");
-    thread_exit();
+    thread_exit((void *) 10);
 }
 
 int main() {
@@ -30,5 +33,5 @@ int main() {
     printf("Main once again\n");
     schedule();
     printf("My last call\n");
-    thread_exit();
+    thread_exit(0);
 }
