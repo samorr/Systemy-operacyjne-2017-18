@@ -5,9 +5,9 @@ sthread_t T1, T2, T3, Main;
 
 void fn1() {
     printf("this is from 1\n");
-    thread_yield();
-    printf("once again 1\n");
-    thread_exit(0);
+    //thread_yield();
+    //printf("once again 1\n");
+    thread_exit((void *) 11);
 }
 void fn2() {
     printf("this is from 2\n");
@@ -19,14 +19,22 @@ void fn2() {
 
 void fn3() {
     printf("this is from 3\n");
+    void *from1;
+    if (thread_join(&T1, &from1)) {
+        printf("Cannot join with T1\n");
+    }
+    printf("value from 1 %ld\n", (long) from1);
     thread_exit((void *) 10);
 }
 
 int main() {
-    init_threads(&Main);
+    init_threads();
     thread_create(&Main, (void *) &main, NULL);
+    thread_detach(&Main);
     thread_create(&T1, (void *) &fn1, NULL);
+    //thread_detach(&T1);
     thread_create(&T2, (void *) &fn2, NULL);
+    thread_detach(&T2);
     thread_create(&T3, (void *) &fn3, NULL);
     printf("Main\n");
     schedule();

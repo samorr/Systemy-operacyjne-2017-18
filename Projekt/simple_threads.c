@@ -26,6 +26,9 @@ void thread_create(sthread_t *thr, void (*func)(), void *arg) {
 
 void schedule() {
     // printf("scheduling\n");
+    if (global_threads_queue->first->next == NULL) {
+        return;
+    }
     sthread_t *old_thread;
     old_thread = global_threads_queue->first;
     global_threads_queue->first = global_threads_queue->first->next;
@@ -35,17 +38,25 @@ void schedule() {
     if (global_threads_queue->first->waiting_for == 0) {
         swapcontext(global_threads_queue->last->context, global_threads_queue->first->context);
     } else {
-        getcontext(global_threads_queue->last->context);
-        while (global_threads_queue->first->waiting_for != 0) { //we need to ommit all waiting threads
-            old_thread = global_threads_queue->first;
-            global_threads_queue->first = global_threads_queue->first->next;
-            old_thread->next = NULL;
-            global_threads_queue->last->next = old_thread;
-            global_threads_queue->last = old_thread;
-        }
+        ommit_waitings();
+    }
+}
+
+void ommit_waitings() {
+    ucontext_t *temp = global_threads_queue->last->context;
+    sthread_t *old_thread;
+    // getcontext(global_threads_queue->last->context);
+    while (global_threads_queue->first->waiting_for != 0) { //we need to ommit all waiting threads
+        old_thread = global_threads_queue->first;
+        global_threads_queue->first = global_threads_queue->first->next;
+        old_thread->next = NULL;
+        global_threads_queue->last->next = old_thread;
+        global_threads_queue->last = old_thread;
+    }
+    getcontext(temp);
+    if (temp != global_threads_queue->first->context) {
         setcontext(global_threads_queue->first->context);
     }
-
 }
 
 void init_threads() {
@@ -77,11 +88,11 @@ int thread_join(sthread_t *thr, void **retval) {
     return 0;
 }
 
-int thread_detach() {
-    if (global_threads_queue->first->joined != NULL) {
+int thread_detach(sthread_t *thr) {
+    if (thr->joined != NULL) {
         return -1;
     }
-    global_threads_queue->first->is_joinable = false;
+    thr->is_joinable = false;
     return 0;
 }
 
@@ -93,8 +104,10 @@ void thread_exit(void *retval) {
 
     // if exiting thread isn't joinable or it has been already joined we can save returned value and free its resources
     if (!thr->is_joinable) {
-        *thr->where_to_ret = retval;
-        thr->joined->waiting_for--;
+        if(thr->joined != NULL && thr->where_to_ret != NULL) {
+            *thr->where_to_ret = retval;
+            thr->joined->waiting_for--;
+        }
         free(thr->context->uc_stack.ss_sp);
         free(thr->context);
     } else { //else we need to save returned value for thread which can join this in the future

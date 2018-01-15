@@ -5,3 +5,6 @@ tworzeniem nowego wątku w kolejce i operacją na kolejce odpowiednio. thread_jo
 wykorzystywać strukturę samego wątku.
 
 Obsługa tworzenia i zmiany wykonywanego wątku będzie wykorzystywała bibliotekę ucontext.
+
+Semafory będą miały własne kolejki, oczekujące wątki nie będą w tym czasie podłączone
+do global_threads_queue.

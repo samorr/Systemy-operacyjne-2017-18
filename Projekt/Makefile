@@ -1,4 +1,4 @@
-Flags = -Wall -Werror -g
+Flags = -Wall -Werror -g -std=gnu99
 C = gcc
 
 

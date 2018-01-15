@@ -27,11 +27,12 @@ struct sthreads_global_queue *global_threads_queue;
 void init_threads();
 
 void schedule();
+void ommit_waitings();
 
 void thread_create(sthread_t *thr, void (*func)(), void *arg);
 void thread_yield();
 int thread_join(sthread_t *thr, void **retval);
-int thread_detach();
+int thread_detach(sthread_t *thr);
 void thread_exit(void *retval);
 
 #endif /* __SIMPLE_THREADS_H */
