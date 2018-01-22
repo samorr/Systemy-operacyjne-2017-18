@@ -1,4 +1,4 @@
-#include<stdio.h>
+#include <stdio.h>
 #include "simple_threads.h"
 #include "simple_semaphores.h"
 

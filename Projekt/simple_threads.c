@@ -16,8 +16,7 @@ void thread_create(sthread_t *thr, void (*func)(), void *arg) {
     makecontext(thr->context, func, 1, arg);
     if (global_threads_queue->first == NULL) {
         global_threads_queue->first = thr;
-    }
-    if (global_threads_queue->last != NULL) {
+    } else {
         global_threads_queue->last->next = thr;
     }
     global_threads_queue->last = thr;
