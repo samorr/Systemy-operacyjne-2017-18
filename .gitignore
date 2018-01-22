@@ -1,5 +1,6 @@
 #output files
 main
+settlers
 *.o
 *.out
 
