@@ -1,5 +1,5 @@
 #include "simple_threads.h"
-#include<stdio.h>
+// #include<stdio.h>
 #define MEM 64000
 
 void thread_create(sthread_t *thr, void (*func)(), void *arg) {
@@ -38,12 +38,12 @@ void schedule() {
     if (global_threads_queue->first->waiting_for == 0) {
         swapcontext(global_threads_queue->last->context, global_threads_queue->first->context);
     } else {
-        ommit_waitings();
+        ommit_waitings(global_threads_queue->last->context);
     }
 }
 
-void ommit_waitings() {
-    ucontext_t *temp = global_threads_queue->last->context;
+void ommit_waitings(ucontext_t *temp) {
+    // ucontext_t *temp = global_threads_queue->last->context;
     sthread_t *old_thread;
     // getcontext(global_threads_queue->last->context);
     while (global_threads_queue->first->waiting_for != 0) { //we need to ommit all waiting threads
@@ -53,7 +53,9 @@ void ommit_waitings() {
         global_threads_queue->last->next = old_thread;
         global_threads_queue->last = old_thread;
     }
-    getcontext(temp);
+    if (temp != NULL) {
+        getcontext(temp);        
+    }
     if (temp != global_threads_queue->first->context) {
         setcontext(global_threads_queue->first->context);
     }
@@ -83,8 +85,8 @@ int thread_join(sthread_t *thr, void **retval) {
         thr->joined = global_threads_queue->first;
         // we have to increase number of threads that executing thread is waiting for
         global_threads_queue->first->waiting_for++;
+        schedule();
     }
-    schedule();
     return 0;
 }
 
@@ -119,6 +121,6 @@ void thread_exit(void *retval) {
         // printf("this is the end\n");
         free(global_threads_queue);
     } else {
-        setcontext(global_threads_queue->first->context);
+        ommit_waitings(NULL);
     }
 }

@@ -1,12 +1,16 @@
 #include<stdio.h>
 #include "simple_threads.h"
+#include "simple_semaphores.h"
 
 sthread_t T1, T2, T3, Main;
+ssemaphore_t sem;
 
 void fn1() {
     printf("this is from 1\n");
-    //thread_yield();
-    //printf("once again 1\n");
+    sem_wait(&sem);
+    thread_yield();
+    printf("once again 1\n");
+    sem_signal(&sem);
     thread_exit((void *) 11);
 }
 void fn2() {
@@ -19,16 +23,20 @@ void fn2() {
 
 void fn3() {
     printf("this is from 3\n");
-    void *from1;
-    if (thread_join(&T1, &from1)) {
-        printf("Cannot join with T1\n");
-    }
-    printf("value from 1 %ld\n", (long) from1);
+    sem_wait(&sem);
+    printf("3 after sem_wait\n");
+    sem_signal(&sem);
+    // void *from1;
+    // if (thread_join(&T1, &from1)) {
+    //     printf("Cannot join with T1\n");
+    // }
+    // printf("value from 1 %ld\n", (long) from1);
     thread_exit((void *) 10);
 }
 
 int main() {
     init_threads();
+    sem.counter = 1;
     thread_create(&Main, (void *) &main, NULL);
     thread_detach(&Main);
     thread_create(&T1, (void *) &fn1, NULL);
