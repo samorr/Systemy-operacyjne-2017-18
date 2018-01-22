@@ -26,4 +26,7 @@ run : main
 clean : main
 		$(RM) main
 		$(RM) main.o
+		$(RM) settlers
+		$(RM) settlers.o
+		$(RM) simple_semaphores.o
 		$(RM) simple_threads.o
