@@ -8,8 +8,8 @@
 
 int Animals, Food;
 ssemaphore_t animalSem, foodSem;
-sthread_t huntersThreads[MAX_SETTLERS];
-sthread_t cooksThreads[MAX_SETTLERS];
+sthread_t *huntersThreads[MAX_SETTLERS];
+sthread_t *cooksThreads[MAX_SETTLERS];
 sthread_t checker, Main;
 
 void hunterJob(void *id) {
@@ -106,13 +106,24 @@ int main (int argc, char *argv[]) {
     foodSem.counter = 1;
 
     for(long i = 0; i < startHunters; i++) {
-        thread_create(&huntersThreads[i],(void *) &hunterJob, NULL);
-        thread_detach(&huntersThreads[i]);
+        huntersThreads[i] = malloc(sizeof(sthread_t));
+        thread_create(huntersThreads[i],(void *) &hunterJob, NULL);
+        thread_join(huntersThreads[i], NULL);
     }
 
     for(long i = 0; i < startCooks; i++) {
-        thread_create(&cooksThreads[i], (void *) &cookJob, NULL);
-        thread_detach(&cooksThreads[i]);
+        cooksThreads[i] = malloc(sizeof(sthread_t));
+        thread_create(cooksThreads[i], (void *) &cookJob, NULL);
+        thread_join(cooksThreads[i], NULL);
+    }
+    thread_yield();
+
+    for(long i = 0; i < startHunters; i++) {
+        free(huntersThreads[i]);
+    }
+
+    for(long i = 0; i < startCooks; i++) {
+        free(cooksThreads[i]);
     }
 
     thread_exit(NULL);

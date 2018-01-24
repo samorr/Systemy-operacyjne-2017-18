@@ -17,6 +17,7 @@ void fn2() {
     printf("this is from 2\n");
     void *from3;
     thread_join(&T3, &from3);
+    thread_yield();
     printf("value from 3 %ld\n", (long) from3);
     thread_exit(0);
 }

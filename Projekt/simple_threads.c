@@ -70,7 +70,9 @@ int thread_join(sthread_t *thr, void **retval) {
     }
 
     if (thr->is_finished) {
-        *retval = thr->val_to_ret;
+        if(retval != NULL) {
+            *retval = thr->val_to_ret;
+        }
         free(thr->context->uc_stack.ss_sp);
         free(thr->context);
     } else {
@@ -79,7 +81,6 @@ int thread_join(sthread_t *thr, void **retval) {
         thr->joined = global_threads_queue->first;
         // we have to increase number of threads that executing thread is waiting for
         global_threads_queue->first->waiting_for++;
-        schedule();
     }
     return 0;
 }
@@ -99,9 +100,11 @@ void thread_exit(void *retval) {
 
     // if exiting thread isn't joinable or it has been already joined we can save returned value and free its resources
     if (!thr->is_joinable) {
-        if(thr->joined != NULL && thr->where_to_ret != NULL) {
-            *thr->where_to_ret = retval;
+        if(thr->joined != NULL ) {
             thr->joined->waiting_for--;
+        }
+        if (thr->where_to_ret != NULL) {
+            *thr->where_to_ret = retval;
         }
         free(thr->context->uc_stack.ss_sp);
         free(thr->context);
