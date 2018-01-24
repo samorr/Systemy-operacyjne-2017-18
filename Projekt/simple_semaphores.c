@@ -12,6 +12,9 @@ void sem_signal(ssemaphore_t *sem) {
     if (sem->first != NULL) {
         sthread_t *thr = sem->first;
         sem->first = thr->next;
+        if (sem->last == thr) {
+            sem->last = NULL;
+        }
         global_threads_queue->last->next = thr;
         global_threads_queue->last = thr;
         thr->next = NULL;

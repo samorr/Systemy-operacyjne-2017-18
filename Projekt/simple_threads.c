@@ -1,9 +1,7 @@
 #include "simple_threads.h"
-// #include<stdio.h>
-#define MEM 64000
+#define MEM SIGSTKSZ
 
 void thread_create(sthread_t *thr, void (*func)(), void *arg) {
-    // printf("creating\n");
     thr->context = (ucontext_t *) malloc(sizeof(ucontext_t));
     getcontext(thr->context);
     thr->context->uc_stack.ss_sp = malloc(MEM);
@@ -24,7 +22,6 @@ void thread_create(sthread_t *thr, void (*func)(), void *arg) {
 }
 
 void schedule() {
-    // printf("scheduling\n");
     if (global_threads_queue->first->next == NULL) {
         return;
     }
@@ -42,9 +39,7 @@ void schedule() {
 }
 
 void ommit_waitings(ucontext_t *temp) {
-    // ucontext_t *temp = global_threads_queue->last->context;
     sthread_t *old_thread;
-    // getcontext(global_threads_queue->last->context);
     while (global_threads_queue->first->waiting_for != 0) { //we need to ommit all waiting threads
         old_thread = global_threads_queue->first;
         global_threads_queue->first = global_threads_queue->first->next;
@@ -98,7 +93,6 @@ int thread_detach(sthread_t *thr) {
 }
 
 void thread_exit(void *retval) {
-    // printf("exiting\n");
     sthread_t *thr = global_threads_queue->first;
     // next thread to execute now
     global_threads_queue->first = global_threads_queue->first->next;
@@ -117,7 +111,6 @@ void thread_exit(void *retval) {
     thr->is_finished = true;
     // if there is no another threads to execute we can free global queue
     if (global_threads_queue->first == NULL) {
-        // printf("this is the end\n");
         free(global_threads_queue);
     } else {
         ommit_waitings(NULL);

@@ -35,7 +35,6 @@ void hunterJob(void *id) {
             thread_exit(NULL);
             return;
         }
-        //usleep(1000);
     }
     printf("Osadnik przetrwał cały rok\n");
     thread_exit(NULL);
@@ -68,7 +67,6 @@ void cookJob(void *id) {
             thread_exit(NULL);
             return;
         }
-        //usleep(1000);
     }
     printf("Osadnik przetrwał cały rok\n");
     thread_exit(NULL);
@@ -82,8 +80,8 @@ void checkerJob(void *t) {
 
         if(Food < 0)
             printf("Food error\n");
+        thread_yield();
 
-        //usleep(10);
     }
     thread_exit(NULL);
     return;

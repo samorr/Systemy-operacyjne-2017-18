@@ -23,6 +23,9 @@ settlers.o : Makefile   settlers.c simple_threads.h simple_semaphores.h
 run : main
 	./main
 
+runsettlers : settlers
+	./settlers 5 5 300 200
+
 clean : main
 		$(RM) main
 		$(RM) main.o
